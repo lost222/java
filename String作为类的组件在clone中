@@ -1,0 +1,52 @@
+//String被当成基本对象看待，换言之，默认的clone()就能创建出String新对象，而非对同一对象的不同引用。
+//以不同的顺序调用test1和test2，结果不一样。
+
+public class MyString implements Cloneable{
+    private String ss;
+    public MyString(String input)
+    {
+        ss = input;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+       MyString om = null;
+       try{
+           om  = (MyString) super.clone();
+       }catch (CloneNotSupportedException e)
+       {
+           e.printStackTrace();
+       }
+
+       return om;
+    }
+
+    @Override
+    public String toString() {
+        return ss;
+    }
+
+    public void concatenate(String add)
+    {
+        ss=ss+add;
+    }
+
+    public static void test1(MyString x)
+    {
+        x.concatenate("test1");
+        System.out.println(x.toString());
+    }
+
+    public static void test2(MyString x)
+    {
+        try {
+           MyString y =(MyString) x.clone();
+           y.concatenate("test2");
+           System.out.println(y.toString());
+        }
+        catch (CloneNotSupportedException e)
+        {
+            e.printStackTrace();
+        }
+    }
+}
